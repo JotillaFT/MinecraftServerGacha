@@ -1,0 +1,15 @@
+.tiny-icon-nav{
+    width: 42px;
+}
+
+.nav-flex{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+.link-navbar{
+    background-color: F5F5F5 !important;
+    color: 121212;
+}

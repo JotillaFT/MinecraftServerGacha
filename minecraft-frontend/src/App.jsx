@@ -5,10 +5,12 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Gallery from './pages/Gallery'
 import Footer from './components/Footer'
 import './App.css'
+import Navbar from './components/Navbar'
 
 function App() {
   return (
     <BrowserRouter>
+      <Navbar></Navbar>
       <Routes>
         <Route path="/gallery" element={<Gallery />} />
       </Routes>
