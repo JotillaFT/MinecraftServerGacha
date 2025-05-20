@@ -1,0 +1,14 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+.banner-head{
+    background-color: #F05454;
+    padding: 5px;
+}
+
+
+.oblique{
+
+    font-family: "Bebas Neue", sans-serif;
+    transform: skew(-13deg);
+    font-size: 80px;
+}
