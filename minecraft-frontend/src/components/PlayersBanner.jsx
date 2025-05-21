@@ -7,10 +7,14 @@ const players = [
     ["ErKtecuento", "Future description"],
     ["marco2004763", "Future description"],
     ["Gatosaurio32", "Future description"],
-    ["Elpanthrix", "Future description"]
+    ["Elpanthrix", "Future description"],
+    ["Yerrog", "Future description"],
+    ["CaLaVeRa_190", "Future description"]
 ];
 
 export default function PlayersBanner() {
+
+
     return (
         <div>
             <div style={{display:"flex", padding:"20px", fontFamily: "Bebas Neue", fontSize: "24px"}}>Jugadores</div>
@@ -31,7 +35,13 @@ export default function PlayersBanner() {
                         <Card style={{ width: "100%"}}>
                             <Meta
                                 avatar={
-                                    <Avatar src={`https://mc-heads.net/avatar/${name}/100`} />
+                                    <a
+                                        href={`https://es.namemc.com/profile/${name}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        <Avatar src={`https://mc-heads.net/avatar/${name}/100`} />
+                                    </a>
                                 }
                                 title={name}
                                 description={role}
