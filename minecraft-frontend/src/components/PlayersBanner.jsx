@@ -14,7 +14,6 @@ const players = [
 
 export default function PlayersBanner() {
 
-
     return (
         <div>
             <div style={{display:"flex", padding:"20px", fontFamily: "Bebas Neue", fontSize: "24px"}}>Jugadores</div>
