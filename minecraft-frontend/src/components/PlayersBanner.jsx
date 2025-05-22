@@ -8,7 +8,7 @@ const players = [
     ["marco2004763", "Future description"],
     ["Gatosaurio32", "Future description"],
     ["Elpanthrix", "Future description"],
-    ["Yerrog", "Future description"],
+    ["Yerrog", "Se me mueren los hijos ayuda..."],
     ["CaLaVeRa_190", "Future description"]
 ];
 
