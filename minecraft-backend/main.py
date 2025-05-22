@@ -4,6 +4,7 @@ from src.models.Message import AuthMessageRequest, ValidateAuthCodeRequest
 from src.controllers.Auth import makeAuthCode
 from mcrcon import MCRcon
 import time
+import json
 
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -27,8 +28,13 @@ async def auth_message(request: AuthMessageRequest):
     auth_codes[request.user] = (code, expire,request.password)
 
     with MCRcon(settings.minecraft_rcon_url, settings.minecraft_rcon_password, port=settings.minecraft_rcon_port) as mcr:
-        resp = mcr.command(f"/msg {request.user} Your auth code is -> {code}")
-        print(resp)
+        title_json = {
+            "text": f"Codigo Verificacion: {code}",
+            "bold": True,
+            "color": "yellow"
+        }
+        mcr.command(f"/title {request.user} times 20 700 20")
+        resp = mcr.command(f"/title {request.user} title {json.dumps(title_json)}")
         return {"status": "ok", "rcon_response": resp}
     
 
