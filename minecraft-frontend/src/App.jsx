@@ -9,6 +9,7 @@ import './App.css'
 import Navbar from './components/Navbar'
 import User from './pages/User'
 import ProtectedRoute from './pages/ProtectedRoute'
+import Login from './pages/Login'
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home/>}></Route>
         <Route path="/gallery" element={<Gallery />} />
+        <Route path="/login" element={<Login />} />
         <Route
           path="/user"
           element={
