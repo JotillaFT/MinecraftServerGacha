@@ -5,15 +5,26 @@ from src.controllers.Auth import makeAuthCode
 from mcrcon import MCRcon
 import time
 
-settings = Settings()
+from fastapi.middleware.cors import CORSMiddleware
+
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # O especifica tu frontend
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+settings = Settings()
 auth_codes = {}
 
-@app.post("/authMessage")
+@app.post("/register")
 async def auth_message(request: AuthMessageRequest):
     code = makeAuthCode()
     expire = time.time() + 120  # 2 minutos en segundos
-    auth_codes[request.user] = (code, expire)
+    auth_codes[request.user] = (code, expire,request.password)
 
     with MCRcon(settings.minecraft_rcon_url, settings.minecraft_rcon_password, port=settings.minecraft_rcon_port) as mcr:
         resp = mcr.command(f"/msg {request.user} Your auth code is -> {code}")
@@ -26,7 +37,7 @@ async def validate_auth_code(request: ValidateAuthCodeRequest):
     user = request.user
     code = int(request.code)
     if user in auth_codes:
-        stored_code, expire = auth_codes[user]
+        stored_code, expire, password = auth_codes[user]
         if time.time() < expire and stored_code == code:
             del auth_codes[user]
             return {"status": "success"}

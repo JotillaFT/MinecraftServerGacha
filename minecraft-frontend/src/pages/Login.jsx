@@ -1,27 +1,48 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Form, Input, Typography, Card } from 'antd';
 import { UserOutlined, LockOutlined, SafetyOutlined } from '@ant-design/icons';
 import '../css/Banner.css';
+import { sendAuthMessage, sendAuthCode } from '../logic/AuthController';
 
 const { Title, Text } = Typography;
 
-// Funciones para Login
+
 const onFinishLogin = values => {
-  console.log('Login Success:', values);
+  //response = sendAuthMessage()
 };
 const onFinishFailedLogin = errorInfo => {
   console.log('Login Failed:', errorInfo);
 };
 
 // Funciones para Registro
-const onFinishRegister = values => {
-  console.log('Register Success:', values);
-};
-const onFinishFailedRegister = errorInfo => {
-  console.log('Register Failed:', errorInfo);
-};
+
+
+
 
 export default function Auth() {
+  const [username, setUsername] = useState(null);
+
+  const onFinishRegister = async values => {
+    try {
+      const response = await sendAuthMessage(values.username, values.password);
+      setUsername(values.username);
+    } catch (error) {
+      console.error("Error en el registro:", error);
+    }
+  };
+
+  const onFinishFailedRegister = errorInfo => {
+    console.log('Register Failed:', errorInfo);
+  };
+
+  const onFinishAuth = async (values) => {
+    try {
+      const response = await sendAuthCode(username, values.code);
+    } catch (error) {
+      console.error('Error al validar el código:', error);
+    }
+  };
+
   return (
     <div
       style={{
@@ -152,6 +173,29 @@ export default function Auth() {
                 size="large"
               />
             </Form.Item>
+            <Form.Item>
+              <Button
+                type="primary"
+                htmlType="submit"
+                block
+                size="large"
+                style={{
+                  background: '#30475E',
+                  borderColor: '#30475E',
+                  fontWeight: 'bold',
+                }}
+              >
+                Pedir Codigo Minecraft
+              </Button>
+            </Form.Item>
+            
+          </Form>
+          <Form
+            name="register-code"
+            onFinish={onFinishAuth}
+            onFinishFailed={onFinishFailedRegister}
+            layout="vertical"
+          >
             <Form.Item
               label="Minecraft Code"
               name="code"
