@@ -5,8 +5,12 @@ from src.controllers.Auth import makeAuthCode
 from mcrcon import MCRcon
 import time
 import json
-
+import bcrypt
+from datetime import datetime, timedelta
+from src.controllers.JWT import create_access_token
+from src.database.DBModels import User, engine
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy.orm import sessionmaker
 
 app = FastAPI()
 app.add_middleware(
@@ -45,9 +49,22 @@ async def validate_auth_code(request: ValidateAuthCodeRequest):
     if user in auth_codes:
         stored_code, expire, password = auth_codes[user]
         if time.time() < expire and stored_code == code:
+            hashed_password = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
+            
+            Session = sessionmaker(bind=engine)
+            session = Session()
+            new_user = User(username=user, password=hashed_password)
+            session.add(new_user)
+            session.commit()
             del auth_codes[user]
-            return {"status": "success"}
+
+            access_token = create_access_token(
+                data={"sub": user},
+                expires_delta=timedelta(days=30)
+            )
+            return {"status": "success", "access_token": access_token}
         elif time.time() >= expire:
             del auth_codes[user]
             return {"status": "expired"}
     return {"status": "invalid"}
+
