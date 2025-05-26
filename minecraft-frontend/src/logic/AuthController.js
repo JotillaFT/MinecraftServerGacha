@@ -30,3 +30,18 @@ export async function sendAuthCode(user, code){
     throw error;
   }
 }
+
+
+export async function sendLogin(user, password) {
+  try {
+    const payload = { user, password };
+    const response = await axios.post(`${API_URL}/login`, payload, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}

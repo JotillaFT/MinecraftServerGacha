@@ -11,6 +11,7 @@ from src.controllers.JWT import create_access_token
 from src.database.DBModels import User, engine
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import sessionmaker
+from fastapi import HTTPException, status
 
 app = FastAPI()
 app.add_middleware(
@@ -68,3 +69,19 @@ async def validate_auth_code(request: ValidateAuthCodeRequest):
             return {"status": "expired"}
     return {"status": "invalid"}
 
+
+@app.post("/login")
+async def login(request: AuthMessageRequest):
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    user = session.query(User).filter(User.username == request.user).first()
+    if not user:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Usuario no encontrado")
+    if not bcrypt.checkpw(request.password.encode(), user.password):
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Contraseña incorrecta")
+
+    access_token = create_access_token(
+        data={"sub": user.username},
+        expires_delta=timedelta(days=30)
+    )
+    return {"status": "success", "access_token": access_token}

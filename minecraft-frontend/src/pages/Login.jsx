@@ -2,16 +2,14 @@ import React, { useState } from 'react';
 import { Button, Form, Input, Typography, Card } from 'antd';
 import { UserOutlined, LockOutlined, SafetyOutlined } from '@ant-design/icons';
 import '../css/Banner.css';
-import { sendAuthMessage, sendAuthCode } from '../logic/AuthController';
+import { sendAuthMessage, sendAuthCode, sendLogin } from '../logic/AuthController';
 import { useNavigate, Navigate } from "react-router-dom";
 import Cookies from 'js-cookie';
 const { Title, Text } = Typography;
+import toast, { Toaster } from 'react-hot-toast';
 
 
 
-const onFinishLogin = values => {
-  //response = sendAuthMessage()
-};
 const onFinishFailedLogin = errorInfo => {
   console.log('Login Failed:', errorInfo);
 };
@@ -23,17 +21,35 @@ export default function Auth() {
   const [username, setUsername] = useState(null);
   const navigate = useNavigate();
   const session = Cookies.get("access_token");
+  var notifyAuth = () => toast.success('Auth Succesfully');
+  const notifyAuthError = () => toast.error('Error al intentar autenticarte')
+  const notifyMinecraftMessage = () => toast.success('Acabamos de enviarte el codigo de autenticacion a tu usuario de Minecraft en el servidor.')
 
   if (session) {
     return <Navigate to="/user" replace></Navigate>
   }
 
-  const onFinishRegister = async values => {
+  const onFinishLogin = async values => {
     try {
+      const response = await sendLogin(values.username, values.password);
+      if (response.status === "success" && response.access_token) {
+        notifyAuth()
+        Cookies.set('access_token', response.access_token, { expires: 30, path: '/', secure: true, sameSite: 'strict' });
+        navigate('/user');
+      }
+    } catch (error) {
+      notifyAuthError()
+    }
+  };
+
+  const onCompleteNormalRegister = async values => {
+    // Este es el registro basico, aqui se mandara un codido de verificacion al servidor.
+    try {
+      notifyMinecraftMessage()
       const response = await sendAuthMessage(values.username, values.password);
       setUsername(values.username);
     } catch (error) {
-      console.error("Error en el registro:", error);
+      notifyAuthError()
     }
   };
 
@@ -45,11 +61,12 @@ export default function Auth() {
     try {
       const response = await sendAuthCode(username, values.code);
       if (response.status === "success" && response.access_token) {
+        notifyAuth()
         Cookies.set('access_token', response.access_token, { expires: 30, path: '/', secure: true, sameSite: 'strict' });
         navigate('/user');
       }
     } catch (error) {
-      console.error('Error al validar el código:', error);
+      notifyAuthError()
     }
   };
 
@@ -62,6 +79,7 @@ export default function Auth() {
         alignItems: 'center',
       }}
     >
+      <Toaster /> 
       <div
         style={{
           display: 'flex',
@@ -157,7 +175,7 @@ export default function Auth() {
           </div>
           <Form
             name="register"
-            onFinish={onFinishRegister}
+            onFinish={onCompleteNormalRegister}
             onFinishFailed={onFinishFailedRegister}
             layout="vertical"
           >
