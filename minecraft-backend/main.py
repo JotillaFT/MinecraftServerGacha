@@ -12,16 +12,18 @@ from src.database.DBModels import User, engine
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import sessionmaker
 from fastapi import HTTPException, status
+from src.routers.User import router as user_router
 
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # O especifica tu frontend
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+app.include_router(user_router, prefix="/user", tags=["user"])
 
 settings = Settings()
 auth_codes = {}

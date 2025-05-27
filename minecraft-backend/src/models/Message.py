@@ -6,3 +6,6 @@ class AuthMessageRequest(BaseModel):
 class ValidateAuthCodeRequest(BaseModel):
     user: str
     code: str
+
+class User(BaseModel):
+    username: str

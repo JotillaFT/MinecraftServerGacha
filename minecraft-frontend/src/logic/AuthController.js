@@ -45,3 +45,31 @@ export async function sendLogin(user, password) {
     throw error;
   }
 }
+
+// Función para obtener el valor de una cookie por nombre
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
+export async function fetchProtectedData() {
+  // Obtén el token de la cookie
+  const token = getCookie("access_token");
+  if (!token) {
+    console.error("No se encontró el token de acceso en las cookies.");
+    return;
+  }
+
+  try {
+    const response = await axios.get("http://localhost:8000/me", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      withCredentials: true,
+    });
+    console.log(response.data);
+  } catch (error) {
+    console.error("Error al acceder al recurso protegido:", error);
+  }
+}
