@@ -13,6 +13,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import sessionmaker
 from fastapi import HTTPException, status
 from src.routers.User import router as user_router
+from src.routers.Minecraft import router as mine_router
 
 app = FastAPI()
 app.add_middleware(
@@ -23,7 +24,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(user_router, prefix="/user", tags=["user"])
+app.include_router(user_router, tags=["user"])
+app.include_router(mine_router, tags=["mine"])
 
 settings = Settings()
 auth_codes = {}

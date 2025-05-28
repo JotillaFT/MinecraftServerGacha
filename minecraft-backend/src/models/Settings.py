@@ -6,5 +6,6 @@ class Settings(BaseSettings):
     minecraft_rcon_password: str
     secret_key: str
     algorithm: str
+    api_key: str
 
     model_config = SettingsConfigDict(env_file='.env')

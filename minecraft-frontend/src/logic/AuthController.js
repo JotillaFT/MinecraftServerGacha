@@ -54,7 +54,6 @@ function getCookie(name) {
 }
 
 export async function fetchProtectedData() {
-  // Obtén el token de la cookie
   const token = getCookie("access_token");
   if (!token) {
     console.error("No se encontró el token de acceso en las cookies.");
@@ -62,14 +61,30 @@ export async function fetchProtectedData() {
   }
 
   try {
-    const response = await axios.get("http://localhost:8000/me", {
+    const response = await axios.get(`${API_URL}/me`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
       withCredentials: true,
     });
-    console.log(response.data);
+    return response.data; // <-- devuelve solo los datos
   } catch (error) {
     console.error("Error al acceder al recurso protegido:", error);
+  }
+}
+
+export async function getPlayers() {
+  const apiKey = import.meta.env.VITE_API_KEY;
+
+  try {
+    const response = await axios.get(`${API_URL}/players`, {
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error al obtener jugadores:', error);
+    throw error;
   }
 }

@@ -10,3 +10,25 @@
     font-weight: 500;
     font-size: 17px;
 }
+
+.oblique-text{
+
+    font-family: "Bebas Neue", sans-serif;
+    transform: skew(-13deg);
+    font-size: 25px;
+}
+
+
+.content-display{
+    background-color: #F05454;
+    padding: "50px";
+    margin: "20px";
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: 2fr 2fr; 
+  align-items: center;
+  gap: 32px;
+  padding: 16px 0;
+}
