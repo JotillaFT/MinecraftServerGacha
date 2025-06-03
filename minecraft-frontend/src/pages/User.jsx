@@ -54,7 +54,7 @@ export default function User() {
                         ))}
                         </Avatar.Group>
                     ) : (
-                        <div style={{ color: '#888', marginTop: 12 }}>
+                        <div className='oblique-text' style={{fontSize: "20px"}}>
                         No hay jugadores conectados
                         </div>
                     )}

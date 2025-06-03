@@ -9,7 +9,8 @@ const players = [
     ["Gatosaurio32", "Future description"],
     ["Elpanthrix", "Future description"],
     ["Yerrog", "Se me mueren los hijos ayuda..."],
-    ["CaLaVeRa_190", "Future description"]
+    ["CaLaVeRa_190", "Future description"],
+    ["Josueft", "Future description"]
 ];
 
 export default function PlayersBanner() {
