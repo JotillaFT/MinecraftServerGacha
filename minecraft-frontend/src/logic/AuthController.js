@@ -88,3 +88,20 @@ export async function getPlayers() {
     throw error;
   }
 }
+
+
+export async function getNew(new_index) {
+  const apiKey = import.meta.env.VITE_API_KEY;
+
+  try {
+    const response = await axios.get(`${API_URL}/news/${new_index}`, {
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error al obtener jugadores:', error);
+    throw error;
+  }
+}
