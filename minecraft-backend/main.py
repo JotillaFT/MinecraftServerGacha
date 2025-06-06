@@ -18,11 +18,15 @@ from src.routers.Minecraft import router as mine_router
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "http://localhost:3000",  # o el puerto que uses en tu frontend
+        "http://127.0.0.1:3000"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 app.include_router(user_router, tags=["user"])
 app.include_router(mine_router, tags=["mine"])
