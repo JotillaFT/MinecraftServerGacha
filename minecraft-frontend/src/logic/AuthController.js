@@ -90,11 +90,11 @@ export async function getPlayers() {
 }
 
 
-export async function getNew(new_index) {
+export async function getNewsList(new_index) {
   const apiKey = import.meta.env.VITE_API_KEY;
 
   try {
-    const response = await axios.get(`${API_URL}/news/${new_index}`, {
+    const response = await axios.get(`${API_URL}/lstnews/${new_index}`, {
       headers: {
         Authorization: `Bearer ${apiKey}`,
       },

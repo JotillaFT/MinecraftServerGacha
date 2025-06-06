@@ -1,5 +1,8 @@
 import React from 'react';
 import { Card, Tag, Typography } from 'antd';
+import '../css/Misc.css';
+
+
 const { Title, Text } = Typography;
 const flagToTag = (flag) => {
   switch (flag) {
@@ -16,23 +19,20 @@ const flagToTag = (flag) => {
 
 const NewsCard = ({ data }) => {
   return (
-    <Card
-      hoverable
-      size="small"
-      style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', padding: 10 }}
-      bodyStyle={{ display: 'flex', justifyContent: 'space-between', width: '80%' }}
-    >
-      <div style={{ flex: 1 }}>
-        <Title level={5} style={{ margin: 0 }}>{data.title}</Title>
-        <Text type="secondary" style={{ fontSize: '12px' }}>{data.date} — {data.author}</Text>
+    <div style={{padding: "20px", backgroundColor: "#F05454"}} >
+      <div style={{display: "flex", justifyContent: "center", gap: "30px", alignItems: "center"}}>
+        <div style={{display: "flex", justifyContent: "center", alignItems: "center", gap:"10px"}}>
+          {flagToTag(data.flags)}
+         <div>
+            <Title level={4} style={{ margin: 0}} className='base-text-bebas'>{data.title}</Title>
+            <Text type="secondary" style={{ fontSize: '15px'}} className='base-text-bebas'>{data.date} — {data.author}</Text>
+         </div>
+        </div>
         <div>
-          <Text ellipsis>{data.information}</Text>
+          <Text ellipsis className='base-text-bebas'>{data.information}</Text>
         </div>
       </div>
-      <div style={{ marginLeft: 'auto' }}>
-        {flagToTag(data.flags)}
-      </div>
-    </Card>
+    </div>
   );
 };
 

@@ -1,32 +1,51 @@
 import React, { useState, useEffect } from 'react';
-import { fetchProtectedData, getPlayers, getNew } from '../logic/AuthController';
-import { Avatar, Space, Popover } from 'antd';
-import { Divider, Tooltip } from 'antd';
+import { fetchProtectedData, getPlayers, getNewsList } from '../logic/AuthController';
+import { Avatar, Space, Popover, Skeleton, Divider, Pagination } from 'antd';
 import '../css/Misc.css';
 import ContentDisplay from '../components/ContentDisplay';
 import NewsCard from '../components/NewsCard';
+import { Navigate } from "react-router-dom";
 
 export default function User() {
   const [username, setUsername] = useState('');
   const [playersList, setPlayersList] = useState([]);
-  const [newsData, setNewsData] = useState(null); // para la noticia
+  const [newsList, setNewsList] = useState([]);
+  const [shouldNavigate, setShouldNavigate] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 2;
 
   useEffect(() => {
-    fetchProtectedData().then(data => {
-      if (data?.username) setUsername(data.username);
-    });
-
-    getPlayers().then(data => {
-      if (data?.players) setPlayersList(data.players);
-    });
-
-    getNew(1).then(data => {
-      if (data) setNewsData(data);
+    Promise.all([
+      fetchProtectedData().then(data => {
+        if (data && data.username) {
+          setUsername(data.username);
+        } else {
+          setShouldNavigate(true);
+        }
+      }),
+      getPlayers().then(data => {
+        if (data?.players) setPlayersList(data.players);
+      }),
+      getNewsList(5).then(data => {
+        if (Array.isArray(data)) setNewsList(data);
+      })
+    ]).finally(() => {
+      setLoading(false);
     });
   }, []);
 
+  const startIdx = (currentPage - 1) * pageSize;
+  const endIdx = startIdx + pageSize;
+  const paginatedNews = newsList.slice(startIdx, endIdx);
+
+
+  if (shouldNavigate) {
+    return <Navigate to="/" replace />;
+  }
+
   return (
-    <>
+    <Skeleton active loading={loading} avatar paragraph={{ rows: 8 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '20px', padding: '40px' }}>
         <Avatar
           size={70}
@@ -38,10 +57,26 @@ export default function User() {
       <div className='content-grid'>
         <ContentDisplay>
           <div>
-                {newsData ? (
-                <NewsCard data={newsData} />
+            <div className='oblique-text' style={{marginTop: "15px"}}>Panel de noticias</div>
+            {newsList.length > 0 ? (
+              <>
+                {paginatedNews.map((news, idx) => (
+                  <React.Fragment key={news.id || idx}>
+                    <Divider />
+                    <NewsCard data={news} />
+                  </React.Fragment>
+                ))}
+                <Pagination
+                  style={{ marginTop: 20, textAlign: "center" }}
+                  current={currentPage}
+                  pageSize={pageSize}
+                  total={newsList.length}
+                  onChange={page => setCurrentPage(page)}
+                  showSizeChanger={false}
+                />
+              </>
             ) : (
-                <div className='oblique-text'>Cargando noticia...</div>
+              <div className='oblique-text'>Cargando noticias...</div>
             )}
           </div>
         </ContentDisplay>
@@ -65,6 +100,6 @@ export default function User() {
           )}
         </ContentDisplay>
       </div>
-    </>
+    </Skeleton>
   );
 }

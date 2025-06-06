@@ -18,3 +18,10 @@ def get_news(new_index: int, current_user: User = Depends(verify_api_key)):
         return all_news[0]
     
     return all_news[int(new_index) - 1]
+
+
+@router.get("/lstnews/{new_index}")
+def get_lstnews(new_index: int, current_user: User = Depends(verify_api_key)):
+    all_news = parse_markdown_folder("src/news/")
+    new_index = min(int(new_index), len(all_news))
+    return all_news[:new_index]

@@ -11,8 +11,15 @@
     font-size: 17px;
 }
 
-.oblique-text{
 
+.base-text-bebas{
+    font-family: "Bebas Neue", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-size: 20px;
+}
+
+.oblique-text{
     font-family: "Bebas Neue", sans-serif;
     transform: skew(-13deg);
     font-size: 25px;
@@ -28,7 +35,15 @@
 .content-grid {
   display: grid;
   grid-template-columns: 2fr 2fr; 
-  align-items: center;
   gap: 32px;
   padding: 16px 0;
+}
+
+.content-grid > * {
+    max-height: 400px;
+    overflow: auto;
+    gap: 20px;
+    max-width: 100%;   /* ✅ No más ancho que su contenedor padre */
+    overflow-x: hidden; /* ✅ Evita scroll horizontal */
+    box-sizing: border-box;
 }
