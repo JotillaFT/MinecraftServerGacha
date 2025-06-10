@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+
 .tiny-icon{
     width: 40px;
 }
@@ -34,7 +35,7 @@
 
 .content-grid {
   display: grid;
-  grid-template-columns: 2fr 2fr; 
+  grid-template-columns: 2fr 2fr;
   gap: 32px;
   padding: 16px 0;
 }
@@ -43,7 +44,11 @@
     max-height: 400px;
     overflow: auto;
     gap: 20px;
-    max-width: 100%;   /* ✅ No más ancho que su contenedor padre */
-    overflow-x: hidden; /* ✅ Evita scroll horizontal */
+    max-width: 100%;
+    overflow-x: hidden;
     box-sizing: border-box;
+}
+
+.copyButton:hover {
+    color: #F05454;
 }

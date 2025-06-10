@@ -22,7 +22,7 @@ export default function Navbar() {
                     <img src='src/assets/mineicon.webp' className='tiny-icon-nav' alt="icon" />
                 </a>
             </div>
-            <div style={{display: "flex", gap: "30px"}}>
+            <div style={{display: "flex", gap: "30px"}} className='link-navbar'>
                 <a href='/gallery'>Galeria de Fotos</a>
                 <a href='/user'>Zona de Usuario</a>
                 {isLoggedIn && (

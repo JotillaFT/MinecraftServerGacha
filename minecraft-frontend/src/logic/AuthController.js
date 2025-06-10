@@ -74,12 +74,11 @@ export async function fetchProtectedData() {
 }
 
 export async function getPlayers() {
-  const apiKey = import.meta.env.VITE_API_KEY;
-
+  const token = getCookie("access_token");
   try {
     const response = await axios.get(`${API_URL}/players`, {
       headers: {
-        Authorization: `Bearer ${apiKey}`,
+        Authorization: `Bearer ${token}`,
       },
     });
     return response.data;
@@ -91,12 +90,26 @@ export async function getPlayers() {
 
 
 export async function getNewsList(new_index) {
-  const apiKey = import.meta.env.VITE_API_KEY;
-
+  const token = getCookie("access_token");
   try {
     const response = await axios.get(`${API_URL}/lstnews/${new_index}`, {
       headers: {
-        Authorization: `Bearer ${apiKey}`,
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error al obtener jugadores:', error);
+    throw error;
+  }
+}
+
+export async function getServerInfo() {
+  const token = getCookie("access_token");
+  try {
+    const response = await axios.get(`${API_URL}/info`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
     });
     return response.data;

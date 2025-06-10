@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { fetchProtectedData, getPlayers, getNewsList } from '../logic/AuthController';
-import { Avatar, Space, Popover, Skeleton, Divider, Pagination } from 'antd';
+import { Avatar, Skeleton} from 'antd';
 import '../css/Misc.css';
+import {fetchProtectedData, getPlayers, getNewsList, getServerInfo} from '../logic/AuthController';
 import ContentDisplay from '../components/ContentDisplay';
-import NewsCard from '../components/NewsCard';
 import { Navigate } from "react-router-dom";
+import NewsPanel from "../components/UserComp/NewsPanel.jsx";
+import PlayersPanel from "../components/UserComp/PlayersPanel.jsx";
+import ServerInfo from "../components/UserComp/ServerInfo.jsx";
+import {Toaster} from "react-hot-toast";
 
 export default function User() {
   const [username, setUsername] = useState('');
@@ -12,8 +15,8 @@ export default function User() {
   const [newsList, setNewsList] = useState([]);
   const [shouldNavigate, setShouldNavigate] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 2;
+  const [serverInfo, setServerInfo] = useState(null);
+
 
   useEffect(() => {
     Promise.all([
@@ -29,16 +32,14 @@ export default function User() {
       }),
       getNewsList(5).then(data => {
         if (Array.isArray(data)) setNewsList(data);
+      }),
+      getServerInfo().then(data => {
+        setServerInfo(data)
       })
     ]).finally(() => {
       setLoading(false);
     });
   }, []);
-
-  const startIdx = (currentPage - 1) * pageSize;
-  const endIdx = startIdx + pageSize;
-  const paginatedNews = newsList.slice(startIdx, endIdx);
-
 
   if (shouldNavigate) {
     return <Navigate to="/" replace />;
@@ -46,6 +47,7 @@ export default function User() {
 
   return (
     <Skeleton active loading={loading} avatar paragraph={{ rows: 8 }}>
+      <Toaster />
       <div style={{ display: 'flex', alignItems: 'center', gap: '20px', padding: '40px' }}>
         <Avatar
           size={70}
@@ -55,51 +57,11 @@ export default function User() {
       </div>
 
       <div className='content-grid'>
-        <ContentDisplay>
-          <div>
-            <div className='oblique-text' style={{marginTop: "15px"}}>Panel de noticias</div>
-            {newsList.length > 0 ? (
-              <>
-                {paginatedNews.map((news, idx) => (
-                  <React.Fragment key={news.id || idx}>
-                    <Divider />
-                    <NewsCard data={news} />
-                  </React.Fragment>
-                ))}
-                <Pagination
-                  style={{ marginTop: 20, textAlign: "center" }}
-                  current={currentPage}
-                  pageSize={pageSize}
-                  total={newsList.length}
-                  onChange={page => setCurrentPage(page)}
-                  showSizeChanger={false}
-                />
-              </>
-            ) : (
-              <div className='oblique-text'>Cargando noticias...</div>
-            )}
-          </div>
-        </ContentDisplay>
-
-        <ContentDisplay>
-          <div className='oblique-text'>Jugadores Activos</div>
-          {playersList.length > 0 ? (
-            <Avatar.Group>
-              {playersList.map(player => (
-                <Popover content={player} key={player}>
-                  <Avatar src={`https://mc-heads.net/avatar/${player}`} alt={player}>
-                    {player[0]}
-                  </Avatar>
-                </Popover>
-              ))}
-            </Avatar.Group>
-          ) : (
-            <div className='oblique-text' style={{ fontSize: '20px' }}>
-              No hay jugadores conectados
-            </div>
-          )}
-        </ContentDisplay>
+        <PlayersPanel playersList={playersList}></PlayersPanel>
+        <ServerInfo serverInfo={serverInfo}></ServerInfo>
       </div>
+
+      <NewsPanel newsList={newsList} ></NewsPanel>
     </Skeleton>
   );
 }
