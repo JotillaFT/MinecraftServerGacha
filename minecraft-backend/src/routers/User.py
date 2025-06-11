@@ -12,7 +12,7 @@ def read_current_user(current_user: User = Depends(get_current_user)):
 
 
 @router.get("/news/{new_index}")
-def get_news(new_index: int, current_user: User = Depends(verify_api_key)):
+def get_news(new_index: int, current_user: User = Depends(get_current_user)):
     all_news = parse_markdown_folder("src/news/")
     if int(new_index) > len(all_news):
         return all_news[0]
@@ -21,7 +21,7 @@ def get_news(new_index: int, current_user: User = Depends(verify_api_key)):
 
 
 @router.get("/lstnews/{new_index}")
-def get_lstnews(new_index: int, current_user: User = Depends(verify_api_key)):
+def get_lstnews(new_index: int, current_user: User = Depends(get_current_user)):
     all_news = parse_markdown_folder("src/news/")
     new_index = min(int(new_index), len(all_news))
     return all_news[:new_index]

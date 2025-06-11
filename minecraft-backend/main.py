@@ -14,6 +14,7 @@ from sqlalchemy.orm import sessionmaker
 from fastapi import HTTPException, status
 from src.routers.User import router as user_router
 from src.routers.Minecraft import router as mine_router
+from src.routers.Config import router as config_router
 
 app = FastAPI()
 app.add_middleware(
@@ -32,6 +33,7 @@ app.add_middleware(
 
 app.include_router(user_router, tags=["user"])
 app.include_router(mine_router, tags=["mine"])
+app.include_router(config_router, tags=["config"])
 
 settings = Settings()
 auth_codes = {}
@@ -44,11 +46,12 @@ async def auth_message(request: AuthMessageRequest):
 
     with MCRcon(settings.minecraft_rcon_url, settings.minecraft_rcon_password, port=settings.minecraft_rcon_port) as mcr:
         title_json = {
-            "text": f"Codigo Verificacion: {code}",
+            "text": f"Auth Code: {code}",
             "bold": True,
             "color": "yellow"
         }
         mcr.command(f"/title {request.user} times 20 700 20")
+        mcr.command(f"/msg {request.user} [AuthSystem]: Hi your auth code is {code}")
         resp = mcr.command(f"/title {request.user} title {json.dumps(title_json)}")
         return {"status": "ok", "rcon_response": resp}
     

@@ -1,13 +1,13 @@
 from fastapi import APIRouter, Depends
 from mcrcon import MCRcon
-from src.controllers.Auth import verify_api_key
+from src.controllers.JWT import get_current_user
 from src.models.Settings import Settings
 import re
 
 router = APIRouter()
 settings = Settings()
 
-@router.get("/players",dependencies=[Depends(verify_api_key)])
+@router.get("/players",dependencies=[Depends(get_current_user)])
 async def get_players():
     with MCRcon(settings.minecraft_rcon_url, settings.minecraft_rcon_password, port=settings.minecraft_rcon_port) as mcr:
         resp = mcr.command("/list")

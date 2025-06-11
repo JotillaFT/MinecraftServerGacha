@@ -52,3 +52,24 @@
 .copyButton:hover {
     color: #F05454;
 }
+
+.ant-pagination-item{
+    background-color: #30475E !important;
+    color: #F5F5F5 !important;
+    margin-bottom: 3px !important;
+
+}
+:where(.css-dev-only-do-not-override-mc1tut).ant-pagination .ant-pagination-item a {
+    color: #F5F5F5 !important;
+}
+
+:where(.css-dev-only-do-not-override-mc1tut).ant-pagination .ant-pagination-item {
+    color: #F5F5F5 !important;
+}
+
+:where(.css-dev-only-do-not-override-mc1tut).ant-pagination .ant-pagination-item-active a {
+    color: #F5F5F5 !important;
+}
+:where(.css-dev-only-do-not-override-mc1tut).ant-pagination .ant-pagination-item-active {
+    border-color: #F5F5F5 !important;
+}

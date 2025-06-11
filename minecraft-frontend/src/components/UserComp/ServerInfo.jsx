@@ -21,14 +21,13 @@ export default function ServerInfo({serverInfo}) {
     };
 
     return(
-        <div>
+        <div style={{display:"flex", flexDirection:"column", gap:"3px"}} className="oblique-text">
             <div>Informacion del Servidor</div>
-            <div style={{fontSize: "23px"}}>
+            <div style={{fontSize: "23px", display:"flex", justifyContent:"center", alignItems:"center", gap:"10px"}}>
                 {serverParsedInfo.server_address}
                 <FaCopy className="copyButton" onClick={handleCopy}/>
             </div>
-            <div>{serverParsedInfo.port}</div>
-            <div></div>
+            <div>{serverParsedInfo.version}</div>
         </div>
     )
 }

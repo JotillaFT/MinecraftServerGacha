@@ -7,5 +7,6 @@ class Settings(BaseSettings):
     secret_key: str
     algorithm: str
     api_key: str
+    server_info: str
 
     model_config = SettingsConfigDict(env_file='.env')

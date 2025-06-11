@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: {
-    host: '0.0.0.0', // para escuchar en todas las interfaces
-    allowedHosts: ['minecraftserverlandpage.onrender.com']
+    host: '0.0.0.0',
+    allowedHosts: ['minecraft.yeisonhomelab.xyz']
   }
 })

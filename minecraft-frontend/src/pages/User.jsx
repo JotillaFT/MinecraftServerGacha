@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Avatar, Skeleton} from 'antd';
 import '../css/Misc.css';
 import {fetchProtectedData, getPlayers, getNewsList, getServerInfo} from '../logic/AuthController';
-import ContentDisplay from '../components/ContentDisplay';
 import { Navigate } from "react-router-dom";
 import NewsPanel from "../components/UserComp/NewsPanel.jsx";
 import PlayersPanel from "../components/UserComp/PlayersPanel.jsx";
