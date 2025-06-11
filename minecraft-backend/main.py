@@ -15,6 +15,7 @@ from fastapi import HTTPException, status
 from src.routers.User import router as user_router
 from src.routers.Minecraft import router as mine_router
 from src.routers.Config import router as config_router
+from src.routers.Gacha import router as gacha_router
 
 app = FastAPI()
 app.add_middleware(
@@ -34,6 +35,8 @@ app.add_middleware(
 app.include_router(user_router, tags=["user"])
 app.include_router(mine_router, tags=["mine"])
 app.include_router(config_router, tags=["config"])
+app.include_router(gacha_router, tags=["gacha_router"])
+
 
 settings = Settings()
 auth_codes = {}
